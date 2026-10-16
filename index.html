@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoalFlow – Student Goal Tracker</title>
+  <meta name="description"
+    content="GoalFlow Growth Universe – goals, garden, planner, exam rescue, recovery mode and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#logoGrad)" />
+          <path d="M9 14l3.5 3.5L19 11" stroke="white" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <defs>
+            <linearGradient id="logoGrad" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#a855f7" />
+              <stop offset="1" stop-color="#06b6d4" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="logo-text">GoalFlow</span>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">✕</button>
+    </div>
+
+    <button class="sidebar-profile" id="sidebarProfileBtn" aria-label="Open profile">
+      <div class="sp-avatar" id="spAvatar">🎓</div>
+      <div class="sp-info">
+        <span class="sp-name" id="spName">Student</span>
+        <span class="sp-level" id="spLevel">Level 1</span>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" id="nav-dashboard" data-section="dashboard" aria-current="page">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg></span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+      <button class="nav-item" id="nav-goals" data-section="goals">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4" />
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+          </svg></span>
+        <span class="nav-label">My Goals</span>
+        <span class="nav-count" id="navGoalCount"></span>
+      </button>
+      <button class="nav-item" id="nav-progress" data-section="progress">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg></span>
+        <span class="nav-label">Progress</span>
+      </button>
+      <button class="nav-item" id="nav-garden" data-section="garden">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22V12" />
+            <path d="M5 3v4M3 5h4M19 3v4M17 5h4" />
+            <path d="M12 12C12 12 7 8.5 7 5a5 5 0 0 1 10 0c0 3.5-5 7-5 7z" />
+          </svg></span>
+        <span class="nav-label">Success Garden</span>
+        <span class="nav-badge">🌱</span>
+      </button>
+      <button class="nav-item" id="nav-planner" data-section="planner">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+          </svg></span>
+        <span class="nav-label">Smart Planner</span>
+      </button>
+      <button class="nav-item" id="nav-exam" data-section="exam">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg></span>
+        <span class="nav-label">Exam Rescue</span>
+        <span class="nav-badge">🚨</span>
+      </button>
+      <button class="nav-item" id="nav-recovery" data-section="recovery">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10" />
+            <path d="M3.51 15a9 9 0 1 0 .49-3.51" />
+          </svg></span>
+        <span class="nav-label">Recovery Mode</span>
+      </button>
+      <button class="nav-item" id="nav-focus" data-section="focus">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </svg></span>
+        <span class="nav-label">Focus Timer</span>
+      </button>
+      <button class="nav-item" id="nav-achievements" data-section="achievements">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="6" />
+            <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+          </svg></span>
+        <span class="nav-label">Achievements</span>
+      </button>
+      <button class="nav-item" id="nav-insights" data-section="insights">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v4M12 16h.01" />
+          </svg></span>
+        <span class="nav-label">Insights</span>
+      </button>
+      <button class="nav-item" id="nav-profile" data-section="profile">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg></span>
+        <span class="nav-label">Profile</span>
+      </button>
+      <button class="nav-item" id="nav-settings" data-section="settings">
+        <span class="nav-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg></span>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="xp-block">
+        <div class="xp-header"><span class="xp-label">🏆 XP Level</span><span class="xp-value" id="xpLevel">1</span>
+        </div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-fill" id="xpBarFill"></div>
+        </div>
+        <span class="xp-sub" id="xpSub">0 / 100 XP</span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content" id="mainContent">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"
+        aria-controls="sidebar"><span></span><span></span><span></span></button>
+      <div class="topbar-date" id="topbarDate"></div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" id="themeToggleBtn" aria-label="Toggle theme" title="Toggle light/dark">
+          <svg class="icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <svg class="icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+        <button class="btn-add-goal" id="topAddGoalBtn" aria-label="Add a new goal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Add Goal
+        </button>
+      </div>
+    </header>
+
+    <!-- ═══════════════════ DASHBOARD ═══════════════════ -->
+    <section class="section active" id="section-dashboard" aria-label="Dashboard">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Dashboard</h1>
+          <p class="section-sub" id="dashGreeting">Good morning!</p>
+        </div>
+      </div>
+      <div class="summary-cards">
+        <div class="summary-card card-purple">
+          <div class="sc-icon">🎯</div>
+          <div class="sc-info"><span class="sc-num" id="totalGoalsNum">0</span><span class="sc-label">Total Goals</span>
+          </div>
+          <div class="sc-wave"></div>
+        </div>
+        <div class="summary-card card-cyan">
+          <div class="sc-icon">✅</div>
+          <div class="sc-info"><span class="sc-num" id="doneGoalsNum">0</span><span class="sc-label">Done Today</span>
+          </div>
+          <div class="sc-wave"></div>
+        </div>
+        <div class="summary-card card-orange">
+          <div class="sc-icon">🔥</div>
+          <div class="sc-info"><span class="sc-num" id="streakNum">0</span><span class="sc-label">Day Streak</span>
+          </div>
+          <div class="sc-wave"></div>
+        </div>
+        <div class="summary-card card-green">
+          <div class="sc-icon">📈</div>
+          <div class="sc-info"><span class="sc-num" id="pctNum">0%</span><span class="sc-label">Today's Rate</span>
+          </div>
+          <div class="sc-wave"></div>
+        </div>
+      </div>
+      <div class="dash-row">
+        <div class="glass-card dash-progress-card">
+          <h2 class="card-title">Today's Progress</h2>
+          <div class="circular-progress-wrap">
+            <svg class="circular-progress" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <linearGradient id="circGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a855f7" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+              </defs>
+              <circle class="cp-bg" cx="60" cy="60" r="52" />
+              <circle class="cp-fill" id="cpFill" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="cp-center"><span class="cp-pct" id="cpPct" aria-live="polite">0%</span><span
+                class="cp-label">Complete</span></div>
+          </div>
+          <div class="progress-detail"><span id="dashDoneText">0 of 0 goals completed</span></div>
+        </div>
+        <div class="glass-card dash-today-card">
+          <h2 class="card-title">Today's Goals</h2>
+          <div class="today-goals-list" id="dashTodayList" role="list">
+            <div class="empty-state-sm">No goals yet. Add one! 🌱</div>
+          </div>
+        </div>
+        <div class="glass-card quote-card">
+          <div class="quote-icon">💬</div>
+          <p class="quote-text" id="quoteText">"The secret of getting ahead is getting started."</p>
+          <p class="quote-author" id="quoteAuthor">— Mark Twain</p>
+          <button class="btn-ghost" id="newQuoteBtn">New Quote ✨</button>
+        </div>
+      </div>
+      <!-- Recovery Banner (shown when goals missed) -->
+      <div class="recovery-banner glass-card" id="recoveryBanner" style="display:none">
+        <span class="rb-icon">💪</span>
+        <div class="rb-text">
+          <strong>Missed yesterday?</strong> That's okay — every day is a fresh start.
+          <span id="rbDetail"></span>
+        </div>
+        <button class="btn-primary" id="rbRecoverBtn">Start Recovery →</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ MY GOALS ═══════════════════ -->
+    <section class="section" id="section-goals" aria-label="My Goals">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">My Goals</h1>
+          <p class="section-sub">Manage everything you want to achieve</p>
+        </div>
+        <button class="btn-primary" id="addGoalBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>Add Goal</button>
+      </div>
+      <div class="goals-toolbar">
+        <div class="search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="search" id="goalSearch" class="search-input" placeholder="Search goals…"
+            aria-label="Search goals" />
+        </div>
+        <div class="filter-bar" role="group" aria-label="Filter by category">
+          <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+          <button class="filter-btn" data-filter="Study" id="filter-Study">📚 Study</button>
+          <button class="filter-btn" data-filter="Exercise" id="filter-Exercise">💪 Exercise</button>
+          <button class="filter-btn" data-filter="Reading" id="filter-Reading">📖 Reading</button>
+          <button class="filter-btn" data-filter="Health" id="filter-Health">🥗 Health</button>
+          <button class="filter-btn" data-filter="Personal" id="filter-Personal">🌟 Personal</button>
+          <button class="filter-btn" data-filter="Other" id="filter-Other">🔧 Other</button>
+        </div>
+      </div>
+      <div class="goals-grid" id="goalsGrid" role="list" aria-label="Goals list"></div>
+      <div class="empty-state" id="goalsEmpty" aria-live="polite">
+        <div class="empty-icon">🎯</div>
+        <h3>No goals yet!</h3>
+        <p>Start by adding your first goal. Every big journey begins with a single step.</p>
+        <button class="btn-primary" id="emptyAddBtn">Add Your First Goal</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ PROGRESS ═══════════════════ -->
+    <section class="section" id="section-progress" aria-label="Progress">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Progress</h1>
+          <p class="section-sub">Track your consistency and growth over time</p>
+        </div>
+      </div>
+      <div class="progress-layout">
+        <div class="glass-card streak-card">
+          <div class="streak-hero">
+            <div class="streak-flame">🔥</div>
+            <div class="streak-info"><span class="streak-number" id="streakBig">0</span><span class="streak-label">Day
+                Streak</span></div>
+          </div>
+          <p class="streak-desc" id="streakDesc">Complete all goals today to start your streak!</p>
+          <div class="streak-milestones">
+            <div class="milestone" id="ms3">3 Days 🌱</div>
+            <div class="milestone" id="ms7">7 Days ⭐</div>
+            <div class="milestone" id="ms14">14 Days 🏅</div>
+            <div class="milestone" id="ms30">30 Days 🏆</div>
+          </div>
+        </div>
+        <div class="glass-card weekly-card">
+          <h2 class="card-title">This Week</h2>
+          <div class="weekly-calendar" id="weeklyCalendar"></div>
+          <div class="weekly-legend"><span class="legend-dot legend-done"></span><span>All done</span><span
+              class="legend-dot legend-partial"></span><span>Partial</span><span
+              class="legend-dot legend-none"></span><span>Nothing</span></div>
+        </div>
+        <div class="glass-card chart-card">
+          <h2 class="card-title">Last 30 Days</h2>
+          <div class="bar-chart" id="barChart"></div>
+          <div class="chart-footer">Completion rate per day</div>
+        </div>
+        <div class="glass-card stats-card">
+          <h2 class="card-title">All-Time Stats</h2>
+          <div class="stats-grid">
+            <div class="stat-item"><span class="stat-num" id="statTotalDays">0</span><span class="stat-label">Days
+                Tracked</span></div>
+            <div class="stat-item"><span class="stat-num" id="statBestStreak">0</span><span class="stat-label">Best
+                Streak</span></div>
+            <div class="stat-item"><span class="stat-num" id="statAvgRate">0%</span><span class="stat-label">Avg
+                Completion</span></div>
+            <div class="stat-item"><span class="stat-num" id="statTotalDone">0</span><span class="stat-label">Goals
+                Completed</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ SUCCESS GARDEN ═══════════════════ -->
+    <section class="section" id="section-garden" aria-label="Success Garden">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">🌱 Success Garden</h1>
+          <p class="section-sub">Your plants grow every time you complete a goal. Missing days won't harm them!</p>
+        </div>
+      </div>
+      <div class="garden-layout">
+        <div class="glass-card garden-main">
+          <div class="garden-ground" id="gardenGround" aria-label="Your virtual garden">
+            <!-- plants injected by JS -->
+          </div>
+          <div class="garden-stats-row">
+            <div class="gs-item"><span class="gs-num" id="gardenTotalPlants">0</span><span class="gs-label">Total
+                Plants</span></div>
+            <div class="gs-item"><span class="gs-num" id="gardenFullGrown">0</span><span class="gs-label">Fully
+                Grown</span></div>
+            <div class="gs-item"><span class="gs-num" id="gardenHealth">100%</span><span class="gs-label">Garden
+                Health</span></div>
+          </div>
+        </div>
+        <div class="garden-side">
+          <div class="glass-card">
+            <h2 class="card-title">🌿 Plant Guide</h2>
+            <div class="plant-guide">
+              <div class="pg-row"><span class="pg-emoji">🌱</span><span><strong>Seed</strong> – Goal created</span>
+              </div>
+              <div class="pg-row"><span class="pg-emoji">🌿</span><span><strong>Sprout</strong> – Done 1–3×</span></div>
+              <div class="pg-row"><span class="pg-emoji">🌳</span><span><strong>Tree</strong> – Done 4–9×</span></div>
+              <div class="pg-row"><span class="pg-emoji">🌸</span><span><strong>Bloom</strong> – Done 10+ times</span>
+              </div>
+            </div>
+            <hr class="divider" />
+            <h3 class="card-title" style="margin-bottom:10px">Category Plants</h3>
+            <div class="plant-guide">
+              <div class="pg-row"><span class="pg-emoji">📚</span><span>Study → <strong>🌴 Palm</strong></span></div>
+              <div class="pg-row"><span class="pg-emoji">💪</span><span>Exercise → <strong>🎋 Bamboo</strong></span>
+              </div>
+              <div class="pg-row"><span class="pg-emoji">📖</span><span>Reading → <strong>🌲 Pine</strong></span></div>
+              <div class="pg-row"><span class="pg-emoji">🥗</span><span>Health → <strong>🌻 Sunflower</strong></span>
+              </div>
+              <div class="pg-row"><span class="pg-emoji">🌟</span><span>Personal → <strong>🌺 Hibiscus</strong></span>
+              </div>
+              <div class="pg-row"><span class="pg-emoji">🔧</span><span>Other → <strong>🌵 Cactus</strong></span></div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <h2 class="card-title">Today's Garden Activity</h2>
+            <div id="gardenActivity">
+              <div class="empty-state-sm">Complete goals to grow plants! 🌱</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ SMART DAY PLANNER ═══════════════════ -->
+    <section class="section" id="section-planner" aria-label="Smart Day Planner">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">📅 Smart Day Planner</h1>
+          <p class="section-sub">Rule-based scheduling from your existing goals — no AI needed</p>
+        </div>
+      </div>
+      <div class="planner-layout">
+        <div class="glass-card planner-form-card">
+          <h2 class="card-title">Plan My Day</h2>
+          <form id="plannerForm" novalidate>
+            <div class="form-group">
+              <label for="plannerMinutes">Available time today (minutes)</label>
+              <input type="number" id="plannerMinutes" min="10" max="720" placeholder="e.g. 120" class="form-control"
+                required />
+            </div>
+            <div class="form-group">
+              <label for="plannerEnergy">Energy Level</label>
+              <select id="plannerEnergy" class="form-control">
+                <option value="high">⚡ High – I'm ready to grind!</option>
+                <option value="medium" selected>😊 Medium – Steady pace</option>
+                <option value="low">😴 Low – Keep it light</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Priority Goals (select up to 3)</label>
+              <div id="plannerPriorityPicker" class="priority-picker"></div>
+            </div>
+            <div class="form-group">
+              <label for="plannerStartTime">Start Time</label>
+              <input type="time" id="plannerStartTime" value="09:00" class="form-control" />
+            </div>
+            <button type="submit" class="btn-primary" id="generatePlanBtn"
+              style="width:100%;justify-content:center;margin-top:8px">⚡ Generate My Schedule</button>
+          </form>
+        </div>
+        <div class="planner-result-col">
+          <div class="glass-card" id="plannerResultCard" style="display:none">
+            <div class="planner-result-header">
+              <h2 class="card-title">📋 Your Schedule for Today</h2>
+              <button class="btn-ghost" id="clearPlanBtn">Clear</button>
+            </div>
+            <div id="plannerSchedule" class="planner-schedule"></div>
+            <div class="planner-summary" id="plannerSummary"></div>
+          </div>
+          <div class="glass-card planner-tips-card">
+            <h2 class="card-title">💡 Scheduling Tips</h2>
+            <ul class="tips-list">
+              <li>High-priority and Study goals are placed first</li>
+              <li>Short breaks (5 min) are added every 45–50 minutes</li>
+              <li>Low energy? Lighter goals and more breaks are added</li>
+              <li>Already-completed goals are skipped automatically</li>
+              <li>Schedule adapts to your available time budget</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ EXAM RESCUE ═══════════════════ -->
+    <section class="section" id="section-exam" aria-label="Exam Rescue Mode">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">🚨 Exam Rescue Mode</h1>
+          <p class="section-sub">Create exams, track chapters, and get a realistic revision schedule</p>
+        </div>
+        <button class="btn-primary" id="addExamBtn">+ Add Exam</button>
+      </div>
+      <div class="exam-layout">
+        <div class="exam-list-col">
+          <div id="examList">
+            <div class="empty-state">
+              <div class="empty-icon">📚</div>
+              <h3>No exams added</h3>
+              <p>Add your upcoming exams to generate a revision plan.</p>
+            </div>
+          </div>
+        </div>
+        <div class="exam-detail-col" id="examDetailCol" style="display:none">
+          <div class="glass-card">
+            <div class="exam-detail-header">
+              <h2 class="card-title" id="examDetailTitle">Exam Detail</h2>
+              <button class="btn-danger btn-sm" id="deleteExamBtn">Delete</button>
+            </div>
+            <div class="exam-urgency-bar glass-card" id="examUrgencyBar"></div>
+            <h3 style="font-size:0.9rem;font-weight:700;margin:16px 0 10px;color:var(--text-2)">📝 Chapters</h3>
+            <div id="examChapterList" class="chapter-list"></div>
+            <h3 style="font-size:0.9rem;font-weight:700;margin:16px 0 10px;color:var(--text-2)">📋 Revision Tasks</h3>
+            <div id="examRevisionTasks" class="revision-tasks"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ RECOVERY MODE ═══════════════════ -->
+    <section class="section" id="section-recovery" aria-label="Recovery Mode">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">💪 Recovery Mode</h1>
+          <p class="section-sub">Missed a day? No problem. Start small and build back up — achievements are never
+            erased.</p>
+        </div>
+      </div>
+      <div class="recovery-layout">
+        <div class="glass-card recovery-status-card" id="recoveryStatusCard"></div>
+        <div class="glass-card recovery-tasks-card">
+          <h2 class="card-title">🌟 Mini Recovery Tasks</h2>
+          <p class="recovery-desc">Complete these lightweight alternatives to ease back into your routine:</p>
+          <div id="recoveryTaskList" class="recovery-task-list"></div>
+        </div>
+        <div class="glass-card recovery-history-card">
+          <h2 class="card-title">📅 Recent Days</h2>
+          <div id="recoveryHistoryView" class="recovery-history"></div>
+        </div>
+        <div class="glass-card mood-card">
+          <h2 class="card-title">😊 Log Today's Mood</h2>
+          <p style="font-size:0.82rem;color:var(--text-2);margin-bottom:12px">How are you feeling today? This helps
+            track your patterns.</p>
+          <div class="mood-picker" id="moodPicker" role="group" aria-label="Mood selection">
+            <button class="mood-btn" data-mood="great" aria-label="Great">😄<span>Great</span></button>
+            <button class="mood-btn" data-mood="good" aria-label="Good">🙂<span>Good</span></button>
+            <button class="mood-btn" data-mood="okay" aria-label="Okay">😐<span>Okay</span></button>
+            <button class="mood-btn" data-mood="low" aria-label="Low">😔<span>Low</span></button>
+            <button class="mood-btn" data-mood="rough" aria-label="Rough">😩<span>Rough</span></button>
+          </div>
+          <div id="moodSaved" class="mood-saved" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ FOCUS TIMER ═══════════════════ -->
+    <section class="section" id="section-focus" aria-label="Focus Timer">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Focus Timer</h1>
+          <p class="section-sub">Pomodoro-style timer to supercharge your study sessions 🍅</p>
+        </div>
+      </div>
+      <div class="focus-layout">
+        <div class="glass-card focus-main-card">
+          <div class="focus-mode-tabs" role="tablist">
+            <button class="focus-tab active" id="tabPomodoro" data-mode="pomodoro" role="tab"
+              aria-selected="true">Pomodoro</button>
+            <button class="focus-tab" id="tabShort" data-mode="short" role="tab" aria-selected="false">Short
+              Break</button>
+            <button class="focus-tab" id="tabLong" data-mode="long" role="tab" aria-selected="false">Long Break</button>
+          </div>
+          <div class="focus-clock">
+            <svg class="focus-ring-svg" viewBox="0 0 200 200" aria-hidden="true">
+              <defs>
+                <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a855f7" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+              </defs>
+              <circle class="focus-ring-bg" cx="100" cy="100" r="88" />
+              <circle class="focus-ring-fill" id="focusRingFill" cx="100" cy="100" r="88" />
+            </svg>
+            <div class="focus-time-display"><span id="focusTime" aria-live="off">25:00</span><span
+                id="focusMode">Focus</span></div>
+          </div>
+          <div class="focus-controls">
+            <button class="btn-focus-control" id="focusResetBtn" title="Reset" aria-label="Reset timer"><svg width="20"
+                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10" />
+                <path d="M3.51 15a9 9 0 1 0 .49-3.51" />
+              </svg></button>
+            <button class="btn-focus-start" id="focusStartBtn" aria-label="Start timer"><svg width="26" height="26"
+                viewBox="0 0 24 24" fill="currentColor" id="focusPlayIcon">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg></button>
+            <button class="btn-focus-control" id="focusSkipBtn" title="Skip" aria-label="Skip to next"><svg width="20"
+                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 4 15 12 5 20 5 4" />
+                <line x1="19" y1="5" x2="19" y2="19" />
+              </svg></button>
+          </div>
+          <div class="focus-sessions"><span>Sessions today: <strong id="focusSessions">0</strong></span><span
+              class="focus-xp-note">+25 XP per session</span></div>
+        </div>
+        <div class="focus-side">
+          <div class="glass-card focus-link-card">
+            <h2 class="card-title">Link to a Goal</h2>
+            <p class="focus-link-desc">Focus on a specific goal during this session</p>
+            <select class="focus-goal-select" id="focusGoalSelect" aria-label="Select goal to focus on">
+              <option value="">— Select a goal —</option>
+            </select>
+          </div>
+          <div class="glass-card focus-history-card">
+            <h2 class="card-title">Today's Sessions</h2>
+            <div class="session-log" id="sessionLog" aria-live="polite">
+              <div class="empty-state-sm">No sessions yet. Start focusing! 🍅</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ ACHIEVEMENTS ═══════════════════ -->
+    <section class="section" id="section-achievements" aria-label="Achievements">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Achievements</h1>
+          <p class="section-sub">Unlock badges by reaching your goals consistently 🏅</p>
+        </div>
+      </div>
+      <div class="achievements-summary glass-card" id="achievementsSummary"></div>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+    </section>
+
+    <!-- ═══════════════════ INSIGHTS ═══════════════════ -->
+    <section class="section" id="section-insights" aria-label="Personalized Insights">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">📊 Insights</h1>
+          <p class="section-sub">Patterns from your actual saved data — no fabricated statistics</p>
+        </div>
+      </div>
+      <div class="insights-layout" id="insightsLayout"></div>
+    </section>
+
+    <!-- ═══════════════════ PROFILE ═══════════════════ -->
+    <section class="section" id="section-profile" aria-label="Profile">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">My Profile</h1>
+          <p class="section-sub">Personalize your GoalFlow experience</p>
+        </div>
+      </div>
+      <div class="profile-layout">
+        <div class="glass-card profile-card">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-display" id="profileAvatarDisplay">🎓</div>
+            <p class="profile-avatar-hint">Choose your avatar:</p>
+            <div class="avatar-grid" id="avatarGrid" role="group" aria-label="Avatar selection"></div>
+          </div>
+        </div>
+        <div class="glass-card profile-form-card">
+          <h2 class="card-title">Your Info</h2>
+          <form id="profileForm" novalidate>
+            <div class="form-group"><label for="profileName">Your Name</label><input type="text" id="profileName"
+                placeholder="e.g. Alex Johnson" maxlength="50" autocomplete="name" /></div>
+            <div class="form-group"><label for="profileBio">Short Bio</label><textarea id="profileBio" rows="3"
+                placeholder="e.g. CS student, coffee lover ☕" maxlength="150"></textarea></div>
+            <div class="form-group"><label for="profileTarget">Daily Study Target (hours)</label><input type="number"
+                id="profileTarget" min="0" max="24" step="0.5" placeholder="e.g. 4" /></div>
+            <div class="modal-footer" style="margin-top:8px"><button type="submit" class="btn-primary"
+                id="saveProfileBtn">💾 Save Profile</button></div>
+          </form>
+        </div>
+        <div class="glass-card profile-stats-card">
+          <h2 class="card-title">Your Stats</h2>
+          <div class="profile-stat-row"><span>🎯 Goals Created</span><strong id="psGoals">0</strong></div>
+          <div class="profile-stat-row"><span>✅ Goals Completed</span><strong id="psDone">0</strong></div>
+          <div class="profile-stat-row"><span>🔥 Best Streak</span><strong id="psBestStreak">0 days</strong></div>
+          <div class="profile-stat-row"><span>🏆 XP Earned</span><strong id="psXP">0 XP</strong></div>
+          <div class="profile-stat-row"><span>🍅 Focus Sessions</span><strong id="psFocus">0</strong></div>
+          <div class="profile-stat-row"><span>🌱 Plants Grown</span><strong id="psPlants">0</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ SETTINGS ═══════════════════ -->
+    <section class="section" id="section-settings" aria-label="Settings">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Settings</h1>
+          <p class="section-sub">Customize your GoalFlow experience</p>
+        </div>
+      </div>
+      <div class="settings-layout">
+        <div class="glass-card settings-group-card">
+          <h2 class="card-title">🎨 Appearance</h2>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Theme</span><span class="setting-desc">Switch between
+                dark and light mode</span></div>
+            <div class="theme-toggle-row">
+              <button class="theme-pill active" id="settingThemeDark" data-theme="dark" aria-pressed="true">🌙
+                Dark</button>
+              <button class="theme-pill" id="settingThemeLight" data-theme="light" aria-pressed="false">☀️
+                Light</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Reduce Motion</span><span class="setting-desc">Disable
+                animations for accessibility</span></div>
+            <label class="toggle-switch" aria-label="Reduce motion"><input type="checkbox"
+                id="reduceMotionToggle" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="glass-card settings-group-card">
+          <h2 class="card-title">⏱️ Focus Timer</h2>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Pomodoro (min)</span><span
+                class="setting-desc">Default 25</span></div><input type="number" id="settingPomodoro"
+              class="setting-input" min="1" max="60" value="25" />
+          </div>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Short Break (min)</span><span
+                class="setting-desc">Default 5</span></div><input type="number" id="settingShortBreak"
+              class="setting-input" min="1" max="30" value="5" />
+          </div>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Long Break (min)</span><span
+                class="setting-desc">Default 15</span></div><input type="number" id="settingLongBreak"
+              class="setting-input" min="1" max="60" value="15" />
+          </div>
+          <div class="modal-footer" style="margin-top:8px"><button class="btn-primary" id="saveTimerSettingsBtn">Save
+              Timer Settings</button></div>
+        </div>
+        <div class="glass-card settings-group-card">
+          <h2 class="card-title">💾 Data Management</h2>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Export Data</span><span class="setting-desc">Download
+                all data as JSON</span></div><button class="btn-ghost" id="exportDataBtn">📥 Export</button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info"><span class="setting-label">Import Data</span><span class="setting-desc">Restore
+                from a GoalFlow backup</span></div><label class="btn-ghost import-label" for="importFileInput">📤
+              Import</label><input type="file" id="importFileInput" accept=".json" style="display:none" />
+          </div>
+          <div class="setting-row danger-row">
+            <div class="setting-info"><span class="setting-label" style="color:var(--rose)">Clear All Data</span><span
+                class="setting-desc">Permanently delete everything</span></div>
+            <button class="btn-danger" id="clearDataBtn">🗑️ Clear Data</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── MODALS ── -->
+  <!-- Goal Modal -->
+  <div class="modal-backdrop" id="goalModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="goalModal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Add New Goal</h2><button class="modal-close" id="modalCloseBtn"
+          aria-label="Close">✕</button>
+      </div>
+      <form class="modal-form" id="goalForm" novalidate>
+        <div class="form-group"><label for="goalName">Goal Name *</label><input type="text" id="goalName"
+            placeholder="e.g. Read 20 pages" maxlength="80" required autocomplete="off" /><span class="char-count"
+            id="goalNameCount">0/80</span></div>
+        <div class="form-group"><label>Category</label>
+          <div class="category-pills" id="categoryPills" role="group"><button type="button" class="cat-pill active"
+              data-cat="Study">📚 Study</button><button type="button" class="cat-pill" data-cat="Exercise">💪
+              Exercise</button><button type="button" class="cat-pill" data-cat="Reading">📖 Reading</button><button
+              type="button" class="cat-pill" data-cat="Health">🥗 Health</button><button type="button" class="cat-pill"
+              data-cat="Personal">🌟 Personal</button><button type="button" class="cat-pill" data-cat="Other">🔧
+              Other</button></div>
+        </div>
+        <div class="form-group"><label for="goalNote">Description (optional)</label><textarea id="goalNote"
+            placeholder="Any extra details…" rows="2" maxlength="200"></textarea></div>
+        <div class="form-group"><label for="goalTarget">Daily Target (optional)</label><input type="text"
+            id="goalTarget" placeholder="e.g. 30 minutes, 10 pages" maxlength="40" autocomplete="off" /></div>
+        <div class="modal-footer"><button type="button" class="btn-ghost" id="cancelGoalBtn">Cancel</button><button
+            type="submit" class="btn-primary" id="saveGoalBtn">Save Goal</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-backdrop" id="deleteModalBackdrop" role="alertdialog" aria-modal="true"
+    aria-labelledby="deleteModalTitle">
+    <div class="modal modal-sm" id="deleteModal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="deleteModalTitle">Delete Goal</h2><button class="modal-close"
+          id="deleteModalCloseBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-form">
+        <p id="deleteModalMsg" style="color:var(--text-2);font-size:0.9rem;line-height:1.6"></p>
+        <div class="modal-footer"><button type="button" class="btn-ghost" id="deleteCancelBtn">Cancel</button><button
+            type="button" class="btn-danger" id="deleteConfirmBtn">Delete</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam Modal -->
+  <div class="modal-backdrop" id="examModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="examModalTitle">
+    <div class="modal" id="examModal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="examModalTitle">Add Exam</h2><button class="modal-close" id="examModalCloseBtn"
+          aria-label="Close">✕</button>
+      </div>
+      <form class="modal-form" id="examForm" novalidate>
+        <div class="form-group"><label for="examSubject">Subject *</label><input type="text" id="examSubject"
+            placeholder="e.g. Mathematics, Physics" maxlength="60" required /></div>
+        <div class="form-group"><label for="examDate">Exam Date *</label><input type="date" id="examDate" required />
+        </div>
+        <div class="form-group"><label for="examChapters">Chapters (comma-separated) *</label><input type="text"
+            id="examChapters" placeholder="e.g. Algebra, Calculus, Geometry" maxlength="300" required /></div>
+        <div class="form-group">
+          <label for="examConfidence">Overall Confidence</label>
+          <select id="examConfidence">
+            <option value="high">😎 High – I know most of it</option>
+            <option value="medium" selected>🤔 Medium – Need some revision</option>
+            <option value="low">😰 Low – Need thorough revision</option>
+          </select>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn-ghost" id="cancelExamBtn">Cancel</button><button
+            type="submit" class="btn-primary">Save Exam</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toastContainer" aria-live="assertive" aria-atomic="true"></div>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
